@@ -1,13 +1,14 @@
-from bottle import route, run
+from bottle import route, run, HTTPResponse
 from core.user import user
 from core.pin import pin
-from utils import http_response, response_builder
+from utils import response_builder
 
 
 @route('/pin/<email>')
 def index(email: str):
 
     response: dict = {}
+
     code: str | None = None
 
     try:
@@ -18,10 +19,9 @@ def index(email: str):
         response.update(response_builder(200, {'pin': code}))
 
     except Exception:
-        response.update(response_builder(500, {'error': "Unknown error"}))
-
+        response.update(response_builder(500, {'error': 'Unknown error'}))
     finally:
-        return http_response(**response)
+        return HTTPResponse(**response)
 
 
 if __name__ == "__main__":
