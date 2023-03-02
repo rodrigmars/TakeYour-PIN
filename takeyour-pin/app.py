@@ -1,10 +1,15 @@
 from bottle import route, run
+from core.user import user
 from core.pin import pin
 
-@route('/pin/<user>')
-def index(user):
+@route('/pin/<email>')
+def index(email: str) -> dict:
     
-    code = pin(user)()
+    code: str | None = None
+
+    if user()(email):
+
+        code = pin()()
 
     return {'pin': code}
 
