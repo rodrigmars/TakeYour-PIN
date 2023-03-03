@@ -19,3 +19,9 @@ pip install -r requirements.txt
 ```bash
 python takeyour-pin/app.py
 ```
+
+## Test REST API
+
+```bash
+curl -v http://localhost:8080/pin/<email>
+```
