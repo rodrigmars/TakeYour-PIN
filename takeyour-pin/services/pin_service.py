@@ -4,10 +4,12 @@ from random import choice  # choices
 
 def pin_service() -> dict:
 
-    def generate() -> str | None:
+    letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
-        letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    def generate() -> str | None:
         return ''.join(choice(letters) for _ in range(6))
-        # return ''.join(choices(ascii_uppercase + ascii_lowercase, k=6))
+
+    # def generate() -> str | None:
+    #     return ''.join(choices(ascii_uppercase + ascii_lowercase, k=6))
 
     return {"generate": generate}

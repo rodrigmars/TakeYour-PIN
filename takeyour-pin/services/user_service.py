@@ -1,10 +1,4 @@
-def user_service() -> dict:
-
-    emails = ['isadorarosangelanogueira@gtx.ag',
-              'tatianejenniferdacruz@construtoracostanorte.com.br',
-              'maya-goncalves79@candello.abv.br',
-              'teresinha.sabrina.brito@ramiresmotors.com.br',
-              'thiago-vieira86@mls.com.br']
+def user_service(emails: list) -> dict:
 
     def email_exists(email: str) -> bool:
 
