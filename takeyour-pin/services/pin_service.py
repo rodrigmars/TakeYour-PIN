@@ -1,8 +1,8 @@
-from random import choices, choice
-from string import ascii_lowercase, ascii_uppercase
+from random import choice  # choices
+# from string import ascii_lowercase, ascii_uppercase
 
 
-def pin(): 
+def pin_service() -> dict:
 
     def generate() -> str | None:
 
@@ -10,4 +10,4 @@ def pin():
         return ''.join(choice(letters) for _ in range(6))
         # return ''.join(choices(ascii_uppercase + ascii_lowercase, k=6))
 
-    return generate
+    return {"generate": generate}
