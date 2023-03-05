@@ -6,14 +6,23 @@ def pin_controller(user_service: dict[str, Callable[[str], bool]],
 
     def generate(email: str) -> dict:
 
-        code: str | None = ""
+        response: dict[str, int | str] = {}
+        exists: bool = False
 
-        if user_service["email_exists"](email):
+        try:
 
-            code = pin_service["generate"]()
+            exists = user_service["email_exists"](email)
 
-        # response.update(response_builder(200, {'pin': code}))
+        except Exception:
+            response = {"status": 500,
+                        "message": "Erro interno ao tentar processar requisição"}
+        else:
 
-        return {"status_code": 200, "pin": code}
+            response = {"status": 200, "pin": pin_service["generate"]()} if exists \
+                else {"status": 404, "message": "Email não encontrado"}
+
+        finally:
+
+            return response
 
     return {"generate": generate}
