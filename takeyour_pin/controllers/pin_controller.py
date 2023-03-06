@@ -1,28 +1,31 @@
 from typing import Callable
 
 
-def pin_controller(user_service: dict[str, Callable[[str], bool]],
-                   pin_service: dict[str, Callable[[], str]]) -> dict:
+def pin_controller(prime_response: Callable, 
+                   user_service: dict[str, Callable],
+                   pin_service: dict[str, Callable]) -> dict:
 
-    def generate(email: str) -> dict:
+    @prime_response
+    def generate(email: str) -> tuple | None:
 
-        response: dict[str, int | str] = {}
+        data: tuple | None = None
         exists: bool = False
 
         try:
-
             exists = user_service["email_exists"](email)
 
-        except Exception:
-            response = {"status": 500,
-                        "message": "Erro interno ao tentar processar requisição"}
+        except Exception as ex:
+
+            # TODO:Implemente aqui uma rotina para log
+
+            data = 500, {
+                "message": "Erro interno ao tentar processar requisição"}
         else:
 
-            response = {"status": 200, "pin": pin_service["generate"]()} if exists \
-                else {"status": 404, "message": "Email não encontrado"}
+            data = (200, {"pin": pin_service["generate"]()}) if exists \
+                else (404, {"message": "Email não encontrado"})
 
         finally:
-
-            return response
+            return data
 
     return {"generate": generate}
