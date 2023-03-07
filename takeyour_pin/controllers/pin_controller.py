@@ -1,7 +1,7 @@
 from typing import Callable
 
 
-def pin_controller(prime_response: Callable, 
+def pin_controller(prime_response: Callable,
                    user_service: dict[str, Callable],
                    pin_service: dict[str, Callable]) -> dict:
 
