@@ -3,7 +3,7 @@ from yaml import load, FullLoader
 from os import path, curdir
 
 
-def config(config_file: str | None = None):
+def config(config_file: str | None = None) -> dict:
 
   path_yaml = path.abspath(curdir)
 
@@ -13,4 +13,4 @@ def config(config_file: str | None = None):
 
     config_list = load(file, Loader=FullLoader)
 
-  print("config_list:>>>>>>", config_list["environment"]["absolute_path"])
+  return config_list

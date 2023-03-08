@@ -3,6 +3,8 @@ from utils import config_utils
 
 from markdown import markdown
 
+from pygments.formatters import HtmlFormatter
+
 from bottle import Bottle, static_file
 
 from utils.reponse_util import prime_response
@@ -15,8 +17,7 @@ from services.pin_service import pin_service
 
 from services.user_service import user_service
 
-config_utils.config()
-
+config = config_utils.config()["environment"]
 
 emails = ['isadora@gtx.ag',
           'tatiane@costanorte.com.br',
@@ -34,24 +35,26 @@ emails = ['isadora@gtx.ag',
 
 app = Bottle()
 
-# root=config.STATIC_PATH
-
-
 @app.route('/')
 def home():
 
-    pass
-    # with open(config.MARKDOWN_API, 'r') as f:
-    #     text = f.read()
-    #     return markdown(text)
+    formatter = HtmlFormatter(style="emacs",full=True,cssclass="codehilite")
+    css_string = formatter.get_style_defs()
+    md_css_string = "<style>" + css_string + "</style>"
+
+    with open(config["markdown_api"], 'r') as f:
+        md_template = md_css_string + \
+            markdown(f.read(), extensions=["fenced_code"])
+
+    return md_template
 
 
 pin_routing(app, pin_controller(prime_response,
                                 user_service(emails),
                                 pin_service()))
 
-
 if __name__ == "__main__":
+
     app.run(host='localhost',
             port=8085,
             reloader=True,
