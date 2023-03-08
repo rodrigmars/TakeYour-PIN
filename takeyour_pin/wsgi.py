@@ -1,5 +1,9 @@
 
-from bottle import Bottle, response, run, template
+from utils import config_utils
+
+from markdown import markdown
+
+from bottle import Bottle, static_file
 
 from utils.reponse_util import prime_response
 
@@ -10,6 +14,9 @@ from controllers.pin_controller import pin_controller
 from services.pin_service import pin_service
 
 from services.user_service import user_service
+
+config_utils.config()
+
 
 emails = ['isadora@gtx.ag',
           'tatiane@costanorte.com.br',
@@ -25,15 +32,27 @@ emails = ['isadora@gtx.ag',
 #     response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
 #     response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 
-
 app = Bottle()
+
+# root=config.STATIC_PATH
+
+
+@app.route('/')
+def home():
+
+    pass
+    # with open(config.MARKDOWN_API, 'r') as f:
+    #     text = f.read()
+    #     return markdown(text)
+
 
 pin_routing(app, pin_controller(prime_response,
                                 user_service(emails),
                                 pin_service()))
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     app.run(host='localhost',
             port=8085,
-            reloader=True)
+            reloader=True,
+            debug=True)
