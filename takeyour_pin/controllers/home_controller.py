@@ -5,29 +5,28 @@ from pygments.formatters import HtmlFormatter
 
 def home_controller(markdown_api: str) -> dict:
 
-    def home() -> tuple | None:
+    def home() -> str:
+
+        html_: str = ""
 
         try:
 
             with open(markdown_api, 'r') as mkd:
-                template_html = markdown(mkd.read(), extensions=["fenced_code"])
+                template_html = markdown(mkd.read(), extensions=[
+                                         "fenced_code", "codehilite"])
 
         except Exception as ex:
             print("ERRO", ex)
 
         else:
 
-            print("md_template", template_html)
-
             formatter = HtmlFormatter(
                 style="zenburn", full=True, cssclass="codehilite")
-            css_string = formatter.get_style_defs()
-            md_css_string = "<style>" + css_string + "</style>"
 
-            html = md_css_string + template_html
+            md_css_string = f"<style>{formatter.get_style_defs()}</style>"
 
-            print(html)
+            html_ = md_css_string + template_html
 
-            return html
+        return html_
 
     return {"home": home}

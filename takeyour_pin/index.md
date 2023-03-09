@@ -2,7 +2,9 @@
 
 Application developed in Bottle a WSGI micro web-framework.
 
-```rest
+## API
+
+```bash
 GET http:localhost/pin/<your_email>
 ```
 
