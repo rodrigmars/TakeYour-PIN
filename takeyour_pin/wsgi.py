@@ -1,17 +1,17 @@
 
 from utils import config_utils
 
-from markdown import markdown
-
-from pygments.formatters import HtmlFormatter
-
-from bottle import Bottle, static_file
+from bottle import Bottle #,static_file, template
 
 from utils.reponse_util import prime_response
+
+from routes.home_route import home_routing
 
 from routes.pin_route import pin_routing
 
 from controllers.pin_controller import pin_controller
+
+from controllers.home_controller import home_controller
 
 from services.pin_service import pin_service
 
@@ -35,19 +35,7 @@ emails = ['isadora@gtx.ag',
 
 app = Bottle()
 
-@app.route('/')
-def home():
-
-    formatter = HtmlFormatter(style="emacs",full=True,cssclass="codehilite")
-    css_string = formatter.get_style_defs()
-    md_css_string = "<style>" + css_string + "</style>"
-
-    with open(config["markdown_api"], 'r') as f:
-        md_template = md_css_string + \
-            markdown(f.read(), extensions=["fenced_code"])
-
-    return md_template
-
+home_routing(app, home_controller(config["markdown_api"]))
 
 pin_routing(app, pin_controller(prime_response,
                                 user_service(emails),
@@ -57,5 +45,4 @@ if __name__ == "__main__":
 
     app.run(host='localhost',
             port=8085,
-            reloader=True,
-            debug=True)
+            reloader=True)
